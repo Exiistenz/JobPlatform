@@ -1,0 +1,22 @@
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block body %}
+<section>
+	<div class="container">
+		<h2 class="text-center">Mes Informations</h2><hr />
+
+		</fieldset>
+		<br />
+		<fieldset>
+			<legend>Information du compte :</legend>
+				<p>Nom : {{ user.nom }}</p>
+				<p>Prenom : {{ user.prenom }}</p>
+				<p>Ville : {{ user.ville }}</p>
+				<p>Pays : {{ user.pays }}</p>
+				<p>{{ 'profile.show.username'|trans }} : {{ user.username }}</p>
+				<p>{{ 'profile.show.email'|trans }} : {{ user.email }}</p>
+				</p>
+		</fieldset>
+	</div>
+</section>
+{% endblock %}

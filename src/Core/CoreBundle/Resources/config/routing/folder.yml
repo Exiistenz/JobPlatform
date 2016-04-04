@@ -1,0 +1,24 @@
+folder_index:
+    path:     /
+    defaults: { _controller: "CoreBundle:Folder:index" }
+    methods:  GET
+
+folder_show:
+    path:     /{id}/show
+    defaults: { _controller: "CoreBundle:Folder:show" }
+    methods:  GET
+
+folder_new:
+    path:     /new
+    defaults: { _controller: "CoreBundle:Folder:new" }
+    methods:  [GET, POST]
+
+folder_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "CoreBundle:Folder:edit" }
+    methods:  [GET, POST]
+
+folder_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "CoreBundle:Folder:delete" }
+    methods:  DELETE

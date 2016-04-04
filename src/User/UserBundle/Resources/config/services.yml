@@ -1,0 +1,10 @@
+services:
+#    user.example:
+#        class: User\UserBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]
+
+    # user.activity_listener:
+    #     class: User\UserBundle\Listener\ActivityListener
+    #     arguments: [@security.context]
+    #     tags:
+    #         - { name: kernel.event_listener, event: kernel.controller, method: onCoreController }

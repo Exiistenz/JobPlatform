@@ -1,0 +1,28 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+
+{% block fos_user_content %}
+{% include "FOSUserBundle:Profile:edit_content.html.twig" %}
+{% endblock fos_user_content %}
+
+{% block javascripts %}
+	<script type="text/javascript">
+		$("#fos_user_profile_form_steamId").blur(function() {
+			var steamInput = document.getElementById("fos_user_profile_form_steamId");
+			var steamId = steamInput.value;
+
+			var regexSteam1 = new RegExp('^STEAM_[0-5]:[01]:\\d+$','i');
+			var regexSteam2 = new RegExp('^U:1:\\d+$','i');
+
+			if(!regexSteam1.test(steamId) && !regexSteam2.test(steamId)) {
+				$("#error").removeClass("hidden");
+				$("#error").html("Le format du Steam Id saisit est invalide.");
+				steamInput.setAttribute('style', 'background-color : #FFAD99;');
+				document.location.href = "#";
+			} else {
+				$("#error").addClass("hidden");
+				steamInput.setAttribute('style', 'background-color : #ffffff;'); 
+			}
+		});
+
+    </script>
+{% endblock %}

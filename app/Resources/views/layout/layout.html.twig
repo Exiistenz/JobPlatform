@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html class="no-js home ui-state-init" xml:lang="fr" lang="fr">
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
+    <title>Accueil - Reconversion Pro</title>
+
+    <link rel="icon" type="image/png" href="http://alternativespro.fr/bundles/projectpresentation/images/favicon-16x16.png?v1_0_0">
+    <link rel="apple-touch-icon" href="http://alternativespro.fr/bundles/projectpresentation/images/favicon-64x64.png?v1_0_0" sizes="64x64">
+    <meta name="viewport" content="initial-scale=1">
+    
+    <link href="css/css.css" rel="stylesheet" type="text/css">
+    <link type="text/css" href="{{ asset('css/select2.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/colorbox.css') }}" type="text/css" media="all">
+    <link rel="stylesheet" href="{{ asset('css/main.css') }}" type="text/css" media="all">
+
+
+    <link rel="stylesheet" href="css/cookiecuttr.css">     
+    
+</head>
+
+<body>
+    <div id="content">      
+        <header class="header" id="page-header">
+            <div class="content-wrap">
+                <h1 class="image-text home">Reconversion Pro</h1>           
+                <nav>
+                    <ul>
+                        <li class="nav-item"><a class="round-btn" href="http://alternativespro.fr/notre-demarche">Notre démarche</a></li>
+                        <li class="nav-item"><a class="round-btn" href="http://alternativespro.fr/les-etapes">Les étapes</a></li>
+                        <li class="nav-item"><a class="round-btn" href="http://alternativespro.fr/temoignages">Témoignages</a></li>
+                        <li class="nav-item"><a class="round-btn" href="http://alternativespro.fr/faq">FAQ</a></li>
+                        <li class="nav-item"><a class="round-btn" href="http://alternativespro.fr/liens-utiles">Liens utiles</a></li>
+                        <li class="nav-item"><a class="round-btn" href="http://alternativespro.fr/contact">Contact</a></li>                
+                        <li class="user-action"><a href="http://alternativespro.fr/connexion" class="round-btn fill-btn">Connexion</a></li>
+                    </ul>
+                </nav> 
+            </div>
+        </header>
+        
+		{% block body %}{% endblock %}
+
+		<footer class="footer">
+            <div class="content-wrap clearfix">
+                <p class="upmc-block"><a href="http://www.fc.upmc.fr/fr/index.html" class="image-text upmc" target="_blank">UPMC</a> <a class="image-text upmc-formation" href="http://www.fc.upmc.fr/fr/index.html" target="_blank">UPMC Formation continue</a></p>
+                <p class="ml">UPMC - Formation continue / I.dC / 2015 <a href="http://alternativespro.fr/mentions-legales">Mentions légales</a></p>
+                <p class="rf-block"><a href="" class="image-text rf" target="_blank">République française</a></p>
+            </div>
+        </footer>        
+    </div>
+                
+    <script type="text/javascript" src="{{ asset('js/jquery_005.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/jquery.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/jquery_002.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/bootstrap-datepicker.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/jquery-ui.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/jquery_004.js') }}"></script>    
+    <script type="text/javascript" src="{{ asset('js/select2.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/jquery_003.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/replace.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/notification.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/diary.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/position.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/main.js') }}"></script>    
+</body>
+</html>

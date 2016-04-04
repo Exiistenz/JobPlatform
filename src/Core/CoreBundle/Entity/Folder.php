@@ -1,0 +1,320 @@
+<?php
+
+namespace Core\CoreBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="folder")
+ * @ORM\Entity(repositoryClass="Core\CoreBundle\Repository\FolderRepository")
+ * @ORM\HasLifecycleCallbacks
+ */
+class Folder
+{
+	/**
+	 * @ORM\Id
+	 * @ORM\Column(type="integer")
+	 * @ORM\GeneratedValue(strategy="AUTO")
+	 */
+	private $id;
+
+	/**
+	  * @ORM\Column(name="updateAt", type="datetime", nullable=true)
+	  */
+	private $updateAt;
+
+	/**
+     * @ORM\PostLoad()
+     */
+    public function postLoad()
+    {
+        $this->updateAt = new \DateTime();
+    }
+
+	/**
+	 * @ORM\Column(name="folderName", type="string", length=255)
+	 */
+	private $folderName;
+
+	/**
+	 * @ORM\Column(name="path", type="string", length=255)
+	 */
+	private $path;
+
+	public $file;
+
+	/**
+	 * @ORM\Column(name="typeFile", type="string", length=255)
+	 */
+	private $typeFile;
+
+	/**
+     * @ORM\ManyToOne(targetEntity="User\UserBundle\Entity\User", inversedBy="documents")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $user;
+
+	/**
+	 * Chemin du dossier utilisateur
+	 */
+	public $userFolder;
+
+
+	/**
+	 * Ancien nom du fichier
+	 */
+	public $temp;
+
+	/**
+	 * Lieu de l'upload du fichier
+	 */
+	protected function getUploadRootDir()
+	{
+		return __DIR__.'/../../../../web/documents';
+	}
+
+	/**
+	 * Chemin du fichier
+	 */
+	protected function getAbsolutePath()
+	{
+		return null === $this->getPath() ? null : $this->getUserFolder().'/'.$this->getPath();
+	}
+
+	/**
+	 * @ORM\PrePersist()
+	 * @ORM\PreUpdate()
+	 *
+	 * Renome le fichier avant l'upload
+	 */
+	public function preUpload()
+	{
+		if (null === $this->file) 
+			return;
+
+		$this->setFolderName($this->getFile()->getClientOriginalName());
+        $this->setUpdateAt(new \DateTime());
+        
+        if (null !== $this->getFile()) {
+        	$user = $this->getUser();	
+            $this->setPath(ucfirst($user->getName()).ucfirst($user->getFirstName()).$user->getId().'-'.$this->getTypeFile().'.'.$this->file->getClientOriginalExtension());	
+        }
+	}
+
+	/**
+	 * @ORM\PostPersist()
+	 * @ORM\PostUpdate()
+	 */
+	public function upload()
+	{
+		if (null === $this->file) 
+			return;
+
+		$user = $this->getUser();
+		$this->setUserFolder($this->getUploadRootDir().'/'.ucfirst($user->getName()).ucfirst($user->getFirstName()).$user->getId());
+
+		if (!file_exists($this->getUploadRootDir())) 
+			mkdir($this->getUploadRootDir(), 0777, true);
+
+		$this->getFile()->move($this->getUserFolder(), $this->getPath());
+
+		if (isset($this->temp)) {
+			try {
+            	unlink($this->getUserFolder().'/'.$this->temp);
+            	$this->temp = null;
+            }
+            catch(Exception $e) {
+            	$this->temp = null;
+            }
+        }
+
+        $this->file = null;
+	}
+
+	/**
+	 * @ORM\PostRemove()
+	 */
+	public function removeUpload()
+	{
+		$user = $this->getUser();
+		$this->setUserFolder($this->getUploadRootDir().'/'.ucfirst($user->getName()).ucfirst($user->getFirstName()).$user->getId());
+		$file = $this->getAbsolutePath();
+
+        if ($file) {
+            unlink($file);
+        }
+	}
+
+	public function getUploadDir()
+	{
+		return 'documents';
+	}
+
+	/**
+	 * Get id
+	 *
+	 * @return integer 
+	 */
+	public function getId()
+	{
+		return $this->id;
+	}
+
+	/**
+     * Sets file.
+     *
+     * @param UploadedFile $file
+     */
+    public function setFile(UploadedFile $file = null)
+    {
+        $this->file = $file;
+
+        if (isset($this->path)) {
+            $this->temp = $this->getPath();
+            $this->setPath(null);
+        } else {
+            $this->setPath('initial');
+        }
+    }
+
+    /**
+     * Get file.
+     *
+     * @return UploadedFile
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    /**
+     * Sets file type.
+     *
+     * @param UploadedFile $file
+     */
+    public function setTypeFile($type)
+    {
+        $this->typeFile = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get file.
+     *
+     * @return UploadedFile
+     */
+    public function getTypeFile()
+    {
+        return $this->typeFile;
+    }
+
+	/**
+	 * Set folderName
+	 *
+	 * @param string $foldername
+	 */
+	public function setFolderName($folder)
+	{
+		$this->folderName = $folder;
+
+		return $this;
+	}
+
+	/**
+	 * Get folderName
+	 *
+	 * @return string 
+	 */
+	public function getFolderName()
+	{
+		return $this->folderName;
+	}
+
+	/**
+     * @param User\UserBundle\Entity\User $user
+     * @return User
+     */
+    public function setUser(\User\UserBundle\Entity\User $user)
+    {
+        $this->user = $user;
+        return $this;
+    }
+
+    /**
+     * @return User\UserBundle\Entity\User
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+	/**
+	 * Set userFolder
+	 *
+	 * @param string $userFolder
+	 */
+	public function setUserFolder($userFolder)
+	{
+		$this->userFolder = $userFolder;
+
+		return $this;
+	}
+
+	/**
+	 * Get userFolder
+	 *
+	 * @return string 
+	 */
+	public function getUserFolder()
+	{
+		return $this->userFolder;
+	}
+
+	/**
+	 * Set path
+	 *
+	 * @param string $path
+	 */
+	public function setPath($path)
+	{
+		$this->path = $path;
+
+		return $this;
+	}
+
+	/**
+	 * Get path
+	 *
+	 * @return string 
+	 */
+	public function getPath()
+	{
+		return $this->path;
+	}
+
+    /**
+     * Set updateAt
+     *
+     * @param \DateTime $updateAt
+     */
+    public function setUpdateAt($updateAt)
+    {
+        $this->updateAt = $updateAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updateAt
+     *
+     * @return \DateTime 
+     */
+    public function getUpdateAt()
+    {
+        return $this->updateAt;
+    }
+}
